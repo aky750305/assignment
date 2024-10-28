@@ -8,16 +8,21 @@
             <mat-label>Email</mat-label>
             <input matInput placeholder="Username or email" formControlName="email" />
           </mat-form-field>
-      
+          <div *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
+            <mat-error>{{errorMessage('Email')}}</mat-error>
+          </div>
           <mat-form-field appearance="outline">
             <mat-icon matSuffix>password</mat-icon>
             <mat-label>Password</mat-label>
             <input matInput type="password" placeholder="Password" formControlName="password" />
           </mat-form-field>
+          <div *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['password'].touched)">
+            <mat-error>{{errorMessage('Password')}}</mat-error>
+          </div>
     </form>
 
   
-      <button mat-raised-button color="primary" (click)="login()">
+      <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="login()">
         Login
       </button>
     </mat-card>
