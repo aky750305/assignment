@@ -1,1 +1,41 @@
-<p>dashboard works!</p>
+<div class="container">
+    <h1>Welcom to your home page!</h1>
+    <p>For adding details click on the below button:</p>
+    <button mat-raised-button (click)="addData()" class="add-button">
+        Add data
+    </button>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    
+        <!--- Note tht these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+    
+        <!-- Position Column -->
+         
+        <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <td mat-cell *matCellDef="let element"> 1 </td>
+        </ng-container>
+    
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let element"> Lovely </td>
+        </ng-container>
+    
+        <!-- Weight Column -->
+        <ng-container matColumnDef="weight">
+            <th mat-header-cell *matHeaderCellDef> Phone number </th>
+            <td mat-cell *matCellDef="let element"> 8700223326 </td>
+        </ng-container>
+    
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="symbol">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let element"> Edit </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    
+    </div>
