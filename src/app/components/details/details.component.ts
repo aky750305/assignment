@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Octokit } from "octokit";
 import { AudioRecordingService } from '../../services/audio-recording.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 const octokit = new Octokit({
 });
@@ -25,6 +26,13 @@ export class DetailsComponent {
   audioName: any;
   audioStream: any;
   audioConf = { audio: true };
+  form = new FormGroup({
+    first_name: new FormControl('', Validators.required),
+    last_name: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
+  });
+
   constructor(
      private audioRecordingService: AudioRecordingService,
      private ref: ChangeDetectorRef,
