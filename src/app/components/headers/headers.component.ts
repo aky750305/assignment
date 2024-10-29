@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+// import {MatDividerModule} from '@angular/material/divider';
 
 @Component({
   selector: 'app-headers',
@@ -8,5 +9,9 @@ import { Component } from '@angular/core';
   styleUrl: './headers.component.scss'
 })
 export class HeadersComponent {
-
+  dataSource = [];
+  
+  logout() {
+    console.log('logout');
+  }
 }

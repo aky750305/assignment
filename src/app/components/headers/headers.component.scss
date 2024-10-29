@@ -1,0 +1,25 @@
+.nav-bar {
+    padding: 16px;
+    max-height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: auto;
+
+    img {
+        width: 60px;
+        height: 60px;
+    }
+
+    button {
+        border: none;
+        background-color: transparent;
+        text-decoration: underline;
+    }
+
+}
+
+hr.solid {
+    border-top: 3px solid #bbb;
+    margin-bottom: 4rem;
+}
