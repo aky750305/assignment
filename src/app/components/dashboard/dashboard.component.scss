@@ -2,13 +2,6 @@
     padding: 0 2rem 2rem 2rem;
 }
 
-h1 {
-    margin-bottom: 2rem;
-    font-family: effra;
-    color: darkblue;
-    font-size: 2.5rem;
-}
-
 .add-button {
     border-radius: 1.5rem;
     padding: .75rem;
@@ -20,6 +13,29 @@ h1 {
 }
 
 table {
-    width: 50%;
+    border-collapse: collapse;
+    width: 100%;
   }
+  
+  thead { 
+    tr:nth-child(odd){
+    background-color: cadetblue;
+    color: aliceblue;
+  }}
+
+  th, td {
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #D6EEEE;
+    color: black;
+  }
+
+  tr:nth-child(odd) {
+    background-color: white;
+    color: black;
+  }
+  
   

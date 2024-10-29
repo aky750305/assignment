@@ -16,7 +16,9 @@ import {
 export class DashboardComponent {
   dataSource = [
     {name: 'ABC'},
-    {name: 'DEF'} 
+    {name: 'DEF'},
+    {name: 'GHI'},
+    {name: 'JKL'}
   ];
   displayedColumns: string[]= [ 'name', 'action'];
   matDialogRef: any;
