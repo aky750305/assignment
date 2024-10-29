@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Octokit } from "octokit";
 import { AudioRecordingService } from '../../services/audio-recording.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 const octokit = new Octokit({
 });
@@ -11,7 +11,7 @@ const octokit = new Octokit({
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [NgIf],
+  imports: [NgIf, ReactiveFormsModule],
   providers: [AudioRecordingService],
   templateUrl: './details.component.html',
   styleUrl: './details.component.scss'
