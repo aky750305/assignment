@@ -14,6 +14,6 @@ export class HeadersComponent {
     private router: Router
     ){}
   logout() {
-    this router.navigateByUrl('/');
+    this.router.navigateByUrl('/');
   }
 }
