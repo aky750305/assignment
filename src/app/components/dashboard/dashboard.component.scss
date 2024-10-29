@@ -1,8 +1,4 @@
-.container {
-    padding: 0 2rem 2rem 2rem;
-}
-
-.add-button {
+button {
     border-radius: 1.5rem;
     padding: .75rem;
     border-style: none;
@@ -15,13 +11,14 @@
 table {
     border-collapse: collapse;
     width: 100%;
+
+    
+  #table-header thead {
+    background-color: cadetblue !important;
+    color: aliceblue !important;
+  }
   }
   
-  thead { 
-    tr:nth-child(odd){
-    background-color: cadetblue;
-    color: aliceblue;
-  }}
 
   th, td {
     text-align: left;
