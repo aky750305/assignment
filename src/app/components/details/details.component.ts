@@ -9,7 +9,7 @@ import { AudioRecordingService } from '../../services/audio-recording.service';
 import { FetchDataService } from '../../services/fetch-data.service';
 
 const octokit = new Octokit({
-  auth:  ""
+  
 });
 
 @Component({
