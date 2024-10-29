@@ -1,6 +1,6 @@
 <div class="modal-header">
   <h4 class="modal-title pull-left">Add User</h4>
-  <button type="button" class="close" aria-label="Close">
+  <button type="button" class="close" aria-label="Close" (click)="close()">
     <span aria-hidden="true">x</span>
   </button>
 </div>
@@ -72,6 +72,6 @@
 
 </div>
 <div class="modal-footer">
-  <button type="button" class="close-btn">Close</button>
-  <button mat-raised-button type="submit" class="submit-btn">Submit</button>
+  <button type="button" class="close-btn" (click)="close()">Close</button>
+  <button mat-raised-button type="submit" class="submit-btn" (click)="submitData()">Submit</button>
 </div>

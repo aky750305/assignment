@@ -1,22 +1,26 @@
 import { NgIf } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 import { Octokit } from "octokit";
 import { AudioRecordingService } from '../../services/audio-recording.service';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FetchDataService } from '../../services/fetch-data.service';
 
 const octokit = new Octokit({
+  auth:  "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"
 });
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [NgIf, ReactiveFormsModule],
+  imports: [NgIf, ReactiveFormsModule, NgxSpinnerModule,],
   providers: [AudioRecordingService],
   templateUrl: './details.component.html',
   styleUrl: './details.component.scss'
 })
-export class DetailsComponent {
+export class DetailsComponent implements OnInit {
   isPlaying = false;
   displayControls = true;
   isAudioRecording = false;
@@ -26,18 +30,34 @@ export class DetailsComponent {
   audioName: any;
   audioStream: any;
   audioConf = { audio: true };
+  @Output() closeModal = new EventEmitter<string>();
+  @Output() updateTable = new EventEmitter<string>();
+  @Input() inputData: any;
   form = new FormGroup({
     first_name: new FormControl('', Validators.required),
     last_name: new FormControl('', Validators.required),
     phone: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
   });
+  storeData: any;
 
   constructor(
      private audioRecordingService: AudioRecordingService,
      private ref: ChangeDetectorRef,
-     private sanitizer: DomSanitizer
-  ) {
+     private sanitizer: DomSanitizer,
+     private spinner: NgxSpinnerService,
+     private fetchService: FetchDataService,
+     private toastr: ToastrService,
+  ) { }
+
+  ngOnInit(): void {
+    const retrievedObject: any = localStorage.getItem('userData')
+    this.storeData = JSON.parse(retrievedObject);
+
+    if (this.inputData?.audio_file_path) {
+      this.getAudioFile();
+    }
+
     this.audioRecordingService.recordingFailed().subscribe(() => {
       this.isAudioRecording = false;
       this.ref.detectChanges();
@@ -52,10 +72,11 @@ export class DetailsComponent {
     
       this.audioBlob = data.blob;
       this.audioName = data.title;
-      console.log(data.blob);
       this.audioBlobUrl = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.blob));
       this.ref.detectChanges();
     });
+
+   if (this.inputData) this.form.patchValue(this.inputData);
   }
 
     startAudioRecording() {
@@ -84,51 +105,116 @@ export class DetailsComponent {
   }
 
   downloadAudioRecordedData() {
-    console.log(this.audioBlob , this.audioBlobUrl);
-    var reader = new FileReader();
-reader.readAsDataURL(this.audioBlob); 
-reader.onloadend = async function() {
-  var base64data: any = reader.result;     
-  console.log(base64data.split(",")[0]);
-  // var getData = octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
-  //   owner: 'aky750305',
-  //   repo: 'assignment',
-  //   path: 'src/assets/123',
-  //   message: 'my commit message',
-  //   sha: "4f8a0fd8ab3537b85a64dcffa1487f4196164d78",
-  //   content: base64data.split(",")[1]
-  // })
-  // .then((e: any) => {
-  //   console.log(atob(e.data.content));
-  // });
-}
-    // this._downloadFile(this.audioBlob, 'audio/ogg', this.audioName);
+    this._downloadFile(this.audioBlob, 'audio/ogg', this.audioName);
+  }
+
+  _downloadFile(data: any, type: string, filename: string): any {
+    const blob = new Blob([data], { type: type });
+    const url = window.URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.download = filename;
+    anchor.href = url;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+  }
+
+
+
+  // _downloadFile(): any {
+  //       var t = octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+  //     owner: 'aky750305',
+  //     repo: 'assignment',
+  //     path: 'src/assets/123',
+  //     headers: {
+  //       'X-GitHub-Api-Version': '2022-11-28'
+  //     }
+  //   }).then((e: any) => {
+  //     console.log(e);
+  //     // const daaat = `data:audio/wav;base64,${e.data.content}`;
+  //     const blob = new Blob([daaat], { type: 'audio/ogg' });
+  //   const url = window.URL.createObjectURL(blob);
+  //   const anchor = document.createElement('a');
+  //   anchor.download = 'efds';
+  //   anchor.href = url;
+  //   document.body.appendChild(anchor);
+  //   anchor.click();
+  //   document.body.removeChild(anchor);
+  //   });
+
+  // }
+
+  close() {
+    this.closeModal.emit();
+  }
+
+  getAudioFile() {
+    
+  }
+
+  submitData() {
+    if (this.form.valid) {
+      if (this.audioBlobUrl) {
+        var reader = new FileReader();
+        reader.readAsDataURL(this.audioBlob);
+        const that = this;
+        reader.onloadend = async function () {
+          var base64data: any = reader.result;
+          console.log(base64data.split(",")[0]);
+          await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
+            owner: 'aky750305',
+            repo: 'assignment',
+            branch: 'audio_files',
+            path: `patients_${Date.now()}`,
+            message: 'upload file',
+            sha: "4f8a0fd8ab3537b85a64dcffa1487f4196164d78",
+            content: base64data.split(",")[1]
+          })
+          .then((e: any) => {
+            that.savePayload(e.data.content.path)
+            console.log(e.data.content.path);
+          });
+        }
+      }
+    }
+  }
+
+  savePayload(path: string) {
+    let payload : any= {
+      ...this.form.value,
+      caregiver_id: this.storeData.id,
+      audio_file_path: path,
+    }
+    this.inputData?.id ? payload['id'] = this.inputData.id : '';
+    let apiCall: any;
+
+    if (this.storeData.type === 'admin') {
+      apiCall = this.inputData?.id
+       ? this.fetchService.editCareGiver(payload)
+       : this.fetchService.addCareGiver(payload)
+    } else if (this.storeData.type === 'caregiver') {
+      apiCall = this.inputData?.id
+       ? this.fetchService.editPatients(payload)
+       : this.fetchService.addPatients(payload)
+    }
+    apiCall.subscribe({
+      next: (res: any) => {
+        this.toastr.success ('Data added / updated successfully','', {
+          timeOut: 3000,
+        });
+        this.updateTable.emit();
+      },
+      error: (err: any) => {
+        this.toastr.error ('Please try again later','', {
+          timeOut: 3000,
+        });
+        this.spinner.hide();
+      }
+    })
   }
 
   ngOnDestroy(): void {
     this.abortAudioRecording();
   }
 
-  _downloadFile(): any {
-        var t = octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
-      owner: 'aky750305',
-      repo: 'assignment',
-      path: 'src/assets/123',
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
-    }).then((e: any) => {
-      console.log(e);
-      const daaat = `data:audio/wav;base64,${e.data.content}`;
-      const blob = new Blob([daaat], { type: 'audio/ogg' });
-    const url = window.URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.download = 'efds';
-    anchor.href = url;
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-    });
-
-  }
 }

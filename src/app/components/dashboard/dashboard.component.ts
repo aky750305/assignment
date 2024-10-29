@@ -18,6 +18,8 @@ export class DashboardComponent implements OnInit {
   @Input() storeData: any;
   dataSource: any;
   displayedColumns: string[]= [ 'name', 'action'];
+  inputData: any;
+
   constructor(
     private fetchService: FetchDataService,
     private spinner: NgxSpinnerService,
@@ -47,8 +49,20 @@ export class DashboardComponent implements OnInit {
     this.modalRef = this.modalService.show(template); 
   }
 
-  OpenModal(template: TemplateRef<any>) {
+  OpenModal(template: TemplateRef<any>, data?: any) {
+    this.inputData = data;
     this.modalRef = this.modalService.show(template); 
+  }
+
+  closeModal() {
+    this.inputData = null;
+    this.modalRef.hide();
+  }
+
+  updateTable() {
+    this.inputData = null;
+    this.modalRef.hide();
+    this.getListData();
   }
 
 }
