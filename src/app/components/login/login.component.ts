@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +22,8 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
     MatIconModule,
     ReactiveFormsModule,
     NgIf,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    NgClass
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
