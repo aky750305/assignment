@@ -15,7 +15,7 @@
         form.controls['password'].touched)">
         <mat-error>{{errorMessage('Password')}}</mat-error>
       </div> -->
-      <button [disabled]="form.invalid" [ngClass]="form.valid ? 'abled' : 'disabled'" type="button">Login</button>
+      <button [disabled]="form.invalid" [ngClass]="form.valid ? 'abled' : 'disabled'" type="button" (click)="login()">Login</button>
     </div>
 
     <ngx-spinner type="ball-scale-multiple"></ngx-spinner>

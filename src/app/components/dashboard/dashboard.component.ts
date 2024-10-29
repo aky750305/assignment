@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, TemplateRef } from '@angular/core';
+import { Component, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
@@ -18,7 +18,6 @@ export class DashboardComponent implements OnInit {
   @Input() storeData: any;
   dataSource: any;
   displayedColumns: string[]= [ 'name', 'action'];
-
   constructor(
     private fetchService: FetchDataService,
     private spinner: NgxSpinnerService,
