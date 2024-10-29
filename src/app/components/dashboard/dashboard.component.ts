@@ -14,8 +14,10 @@ import {
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
-  dataSource = [];
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  dataSource = [
+    {name: 'ABC'}
+  ];
+  displayedColumns: string[] = [ 'name', 'action'];
   matDialogRef: any;
   constructor(
     // private matDialogRef: MatDialogRef,
