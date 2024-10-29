@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 // import {MatDividerModule} from '@angular/material/divider';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-headers',
   standalone: true,
@@ -10,8 +10,10 @@ import { Component } from '@angular/core';
 })
 export class HeadersComponent {
   dataSource = [];
-  
+  constructor (
+    private router: Router
+    ){}
   logout() {
-    console.log('logout');
+    this router.navigateByUrl('/');
   }
 }
