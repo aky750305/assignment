@@ -9,4 +9,10 @@ export class FetchDataService {
     loginUser(data: any) {
         return this.http.get<any[]>(`${this.apiUrl}/users`, {params: data})
     }
+
+    listingData(data: any) {
+        return data.type === 'admin' ? 
+            this.http.get<any[]>(`${this.apiUrl}/users`, {params: {type: 'caregiver'}})
+            : this.http.get<any[]>(`${this.apiUrl}/patients`)
+    }
 }

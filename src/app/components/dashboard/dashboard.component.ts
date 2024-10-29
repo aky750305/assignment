@@ -1,47 +1,55 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
+import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { FetchDataService } from '../../services/fetch-data.service';
 import { DetailsComponent } from '../details/details.component';
-import {
-  MatDialogRef,
-  MatDialogModule,
-  MatDialog
-} from "@angular/material/dialog";
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatTableModule, MatDialogModule],
+  imports: [MatTableModule, ModalModule, NgxSpinnerModule, DetailsComponent],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrl: './dashboard.component.scss',
+  providers: [FetchDataService, BsModalService]
 })
-export class DashboardComponent {
-  dataSource = [
-    {name: 'ABC'},
-    {name: 'DEF'},
-    {name: 'GHI'},
-    {name: 'JKL'}
-  ];
+export class DashboardComponent implements OnInit {
+  // modalRef: BsModalRef;
+  @Input() storeData: any;
+  dataSource: any;
   displayedColumns: string[]= [ 'name', 'action'];
-  matDialogRef: any;
+
   constructor(
-    // private matDialogRef: MatDialogRef,
-    private matDialog: MatDialog
+    private fetchService: FetchDataService,
+    private spinner: NgxSpinnerService,
+    public modalService: BsModalService,
+    public modalRef: BsModalRef
   ) {}
 
-  addData() {
-    // console.log('addData');
-    this.OpenModal();
+  ngOnInit(): void {
+    this.getListData();
   }
 
-  OpenModal() {
-    this.matDialogRef = this.matDialog.open(DetailsComponent, {
-      disableClose: true
-    });
-
-    this.matDialogRef.afterClosed().subscribe((res:any) => {
-      if ((res == true)) {
-        // this.name = "";
+  getListData() {
+    this.spinner.show();
+    this.fetchService.listingData({type: this.storeData.type}).subscribe({
+      next: (res) => {
+        this.dataSource = res;
+        this.spinner.hide();
+      },
+      error: (err) => {
+        this.dataSource = [];
+        this.spinner.hide();
       }
-    });
+    })
+  }
+
+  addData(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template); 
+  }
+
+  OpenModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template); 
   }
 
 }

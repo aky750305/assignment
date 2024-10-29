@@ -1,5 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -7,7 +8,8 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [
     RouterModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDialogModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

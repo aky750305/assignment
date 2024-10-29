@@ -53,7 +53,6 @@ export class LoginComponent {
             });
             const storageData: any = {...res[0]};
             delete storageData.password;
-            debugger
             localStorage.setItem('userData', JSON.stringify(storageData));
             this.router.navigateByUrl('/dashboard');
           } else {

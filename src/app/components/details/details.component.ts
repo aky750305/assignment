@@ -1,10 +1,12 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { AudioRecordingService } from '../../services/audio-recording.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { NgIf } from '@angular/common';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Octokit } from "octokit";
+import { AudioRecordingService } from '../../services/audio-recording.service';
+
 const octokit = new Octokit({
 });
+
 @Component({
   selector: 'app-details',
   standalone: true,
