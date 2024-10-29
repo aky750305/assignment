@@ -8,9 +8,7 @@ import { Octokit } from "octokit";
 import { AudioRecordingService } from '../../services/audio-recording.service';
 import { FetchDataService } from '../../services/fetch-data.service';
 
-const octokit = new Octokit({
-  
-});
+const octokit = new Octokit({});
 
 @Component({
   selector: 'app-details',
