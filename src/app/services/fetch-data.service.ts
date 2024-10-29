@@ -27,6 +27,6 @@ export class FetchDataService {
         return this.http.post<any[]>(`${this.apiUrl}/patients`, payload)
     }
     editPatients(payload: any) {
-        return this.http.patch<any[]>(`${this.apiUrl}/patients/${payload.id}`, payload)
+        return this.http.put<any[]>(`${this.apiUrl}/patients/${payload.id}`, payload)
     }
 }

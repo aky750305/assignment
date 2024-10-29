@@ -73,5 +73,5 @@
 </div>
 <div class="modal-footer">
   <button type="button" class="close-btn" (click)="close()">Close</button>
-  <button mat-raised-button type="submit" class="submit-btn" (click)="submitData()">Submit</button>
+  <button mat-raised-button type="submit" class="submit-btn" (click)="submitData()">{{inputData?.id ? 'Save': 'Submit'}}</button>
 </div>

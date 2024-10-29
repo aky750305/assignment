@@ -8,7 +8,9 @@ import { Octokit } from "octokit";
 import { AudioRecordingService } from '../../services/audio-recording.service';
 import { FetchDataService } from '../../services/fetch-data.service';
 
-const octokit = new Octokit({});
+const octokit = new Octokit({
+
+});
 
 @Component({
   selector: 'app-details',
@@ -170,19 +172,20 @@ export class DetailsComponent implements OnInit {
           })
           .then((e: any) => {
             that.savePayload(e.data.content.path)
-            console.log(e.data.content.path);
           });
         }
+      } else {
+        this.savePayload()
       }
     }
   }
 
-  savePayload(path: string) {
+  savePayload(path?: string) {
     let payload : any= {
       ...this.form.value,
-      caregiver_id: this.storeData.id,
-      audio_file_path: path,
+      caregiver_id: this.storeData.id
     }
+    path ? payload['audio_file_path'] = path : '';
     this.inputData?.id ? payload['id'] = this.inputData.id : '';
     let apiCall: any;
 
