@@ -1,28 +1,33 @@
 <div class="container">
-    <h1>Welcom to your home page!</h1>
-    <p>For adding details click on the below button:</p>
-    <button mat-raised-button (click)="addData()" class="add-button">
-        Add data
-    </button>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    
-        <!--- Note tht these columns can be defined in any order.
-              The actual rendered columns are set as a property on the row definition" -->
-    
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> Name </th>
-            <td mat-cell *matCellDef="let element"> Lovely </td>
-        </ng-container>
-    
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef>Action</th>
-            <td mat-cell *matCellDef="let element" (click)="OpenModal()"> Edit </td>
-        </ng-container>
-    
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-    
+    <div class="row">
+        <div class="col-lg-6">
+            <h1>Welcom to your home page!</h1>
+            <p>For adding details click on the below button:</p>
+            <button mat-raised-button (click)="addData()" class="add-button">
+                Add data
+            </button>
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            
+                <!--- Note tht these columns can be defined in any order.
+                      The actual rendered columns are set as a property on the row definition" -->
+            
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let element"> Lovely </td>
+                </ng-container>
+            
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element" (click)="OpenModal()"> Edit </td>
+                </ng-container>
+            
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            
+            </div>
+        </div>
     </div>
+    

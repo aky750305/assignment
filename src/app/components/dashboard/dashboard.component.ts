@@ -15,9 +15,10 @@ import {
 })
 export class DashboardComponent {
   dataSource = [
-    {name: 'ABC'}
+    {name: 'ABC'},
+    {name: 'DEF'} 
   ];
-  displayedColumns: string[] = [ 'name', 'action'];
+  displayedColumns: string[]= [ 'name', 'action'];
   matDialogRef: any;
   constructor(
     // private matDialogRef: MatDialogRef,

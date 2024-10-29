@@ -1,29 +1,27 @@
-<div style="padding: 20px; background-color: #3f51b5; height: 100%">
-    <mat-card
-      style="display: flex; flex-direction: column; margin: 100px auto; max-width: 400px"
-    >
-    <form [formGroup]="form">
-        <mat-form-field appearance="outline">
-            <mat-icon matSuffix>account_circle</mat-icon>
-            <mat-label>Email</mat-label>
-            <input matInput placeholder="Username or email" formControlName="email" />
-          </mat-form-field>
-          <div *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
-            <mat-error>{{errorMessage('Email')}}</mat-error>
-          </div>
+  <div class="login-page">
+    <h1>Welcome to your login page.</h1>
+      <mat-card>
+      <form [formGroup]="form">
+        <div>
           <mat-form-field appearance="outline">
-            <mat-icon matSuffix>password</mat-icon>
-            <mat-label>Password</mat-label>
-            <input matInput type="password" placeholder="Password" formControlName="password" />
-          </mat-form-field>
-          <div *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['password'].touched)">
-            <mat-error>{{errorMessage('Password')}}</mat-error>
+              <mat-icon matSuffix>account_circle</mat-icon>
+              <mat-label>Email</mat-label>
+              <input matInput placeholder="Username or email" formControlName="email" />
+            </mat-form-field>
+            <div *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
+              <mat-error>{{errorMessage('Email')}}</mat-error>
           </div>
-    </form>
-
-  
-      <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="login()">
-        Login
-      </button>
-    </mat-card>
-  </div>
+          <div>        
+            <mat-form-field appearance="outline">
+              <mat-icon matSuffix>password</mat-icon>
+              <mat-label>Password</mat-label>
+              <input matInput type="password" placeholder="Password" formControlName="password" />
+            </mat-form-field>
+            <div *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['password'].touched)">
+              <mat-error>{{errorMessage('Password')}}</mat-error>
+          </div>
+            
+        <button mat-raised-button (click)="login()">
+          Login
+        </button>
+    </div>
