@@ -10,7 +10,9 @@ import { FetchDataService } from '../../services/fetch-data.service';
 import { from, Observable } from 'rxjs';
 
 const octokit = new Octokit({
-  
+
+  auth:  "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"
+
 });
 
 @Component({
@@ -198,6 +200,7 @@ export class DetailsComponent implements OnInit {
     let apiCall: any;
 
     if (this.storeData.type === 'admin') {
+      payload['type']='caregiver';
       apiCall = this.inputData?.id
        ? this.fetchService.editCareGiver(payload)
        : this.fetchService.addCareGiver(payload)

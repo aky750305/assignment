@@ -1,15 +1,16 @@
+<app-headers></app-headers>
 <div class="login-page">
   <h1>{{'welcome' | translate }} to your login page.</h1>
   <form [formGroup]="form">
     <div class="container">
-      <label for="uname"><b>Username</b></label>
-      <input type="text" placeholder="Enter Username" name="uname" formControlName="email">
+      <label for="uname"><b>Email</b></label>
+      <input type="text" placeholder="Enter email" name="uname" formControlName="email">
       <!-- <div *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
         <mat-error>{{errorMessage('Email')}}</mat-error>
       </div> -->
 
       <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" formControlName="password">
+      <input type="password" placeholder="Enter password" name="psw" formControlName="password">
       <!-- <div
         *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty ||
         form.controls['password'].touched)">

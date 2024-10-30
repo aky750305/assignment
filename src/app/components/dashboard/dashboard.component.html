@@ -13,7 +13,10 @@
             
                 <ng-container matColumnDef="action">
                     <th mat-header-cell *matHeaderCellDef>Action</th>
-                    <td mat-cell *matCellDef="let element" (click)="OpenModal(template, element)"> Edit </td>
+                    <td mat-cell *matCellDef="let element" (click)="OpenModal(template, element)">
+                         <i class="material-icons">edit</i>
+                         <i class="material-icons">&#xe872;</i>
+                     </td>
                 </ng-container>
             
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

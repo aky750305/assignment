@@ -23,6 +23,11 @@ table {
   th, td {
     text-align: left;
     padding: 8px;
+
+    .material-icons {
+      color: mediumblue;
+      margin-right: 12px ;
+    }
   }
   
   tr:nth-child(even) {

@@ -1,5 +1,5 @@
 .login-page {
-    margin-top: 10rem ;
+    margin-top: 2rem ;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -28,7 +28,7 @@ input[type=text], input[type=password] {
 }
 
 .abled {
-    background-color: #04AA6D;
+    background-color: #04AA6D !important;
     color: white;
     padding: 14px 20px;
     margin: 8px 0;

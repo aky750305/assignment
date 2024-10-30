@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FetchDataService } from '../../services/fetch-data.service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { HeadersComponent } from '../headers/headers.component';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,8 @@ import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate
     NgIf,
     NgxSpinnerModule,
     NgClass,
-    TranslateModule
+    TranslateModule,
+    HeadersComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

@@ -15,6 +15,17 @@
         text-decoration: underline;
     }
 
+    select {
+        position: absolute;
+        left: 84%;
+        border: none;
+        text-decoration: underline;
+
+        option {
+            font-size: small;
+        }
+    }
+
 }
 
 hr.solid {
