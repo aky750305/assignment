@@ -11,7 +11,6 @@ import { from, Observable } from 'rxjs';
 
 const octokit = new Octokit({
 
-  auth:  "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"
 
 });
 
