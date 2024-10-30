@@ -187,8 +187,7 @@ export class DetailsComponent implements OnInit {
 
   savePayload(path?: string) {
     let payload : any= {
-      ...this.form.value,
-      caregiver_id: this.storeData.id
+      ...this.form.value
     }
     path ? payload['audio_file_path'] = path : '';
     this.inputData?.id ? payload['id'] = this.inputData.id : '';
@@ -199,6 +198,8 @@ export class DetailsComponent implements OnInit {
        ? this.fetchService.editCareGiver(payload)
        : this.fetchService.addCareGiver(payload)
     } else if (this.storeData.type === 'caregiver') {
+      payload['caregiver_id'] = this.storeData.id;
+      payload['type']='patient';
       apiCall = this.inputData?.id
        ? this.fetchService.editPatients(payload)
        : this.fetchService.addPatients(payload)
