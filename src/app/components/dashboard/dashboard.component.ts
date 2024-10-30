@@ -4,14 +4,15 @@ import { BsModalRef, BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { FetchDataService } from '../../services/fetch-data.service';
 import { DetailsComponent } from '../details/details.component';
+import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatTableModule, ModalModule, NgxSpinnerModule, DetailsComponent],
+  imports: [MatTableModule, ModalModule, NgxSpinnerModule, DetailsComponent, TranslateModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
-  providers: [FetchDataService, BsModalService]
+  providers: [FetchDataService, BsModalService, TranslatePipe]
 })
 export class DashboardComponent implements OnInit {
   // modalRef: BsModalRef;
@@ -24,7 +25,8 @@ export class DashboardComponent implements OnInit {
     private fetchService: FetchDataService,
     private spinner: NgxSpinnerService,
     public modalService: BsModalService,
-    public modalRef: BsModalRef
+    public modalRef: BsModalRef,
+    public translate: TranslatePipe
   ) {}
 
   ngOnInit(): void {

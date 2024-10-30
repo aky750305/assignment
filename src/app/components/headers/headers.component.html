@@ -3,14 +3,12 @@
         <div class="nav-bar">
             <img src="src/assets/images/Logo.png" alt="logo-image">
 
-            <select id="langSelector">
-                <option value="en">English</option>
-                <option value="fr">French</option>
-            </select>
-            <select id="langSelector">
-                <option value="en">English</option>
-                <option value="fr">French</option>
-            </select>
+            <ng-container *ngIf="i18nLang">
+                <select id="langSelector" [(ngModel)]="i18nLang" (change)="onChange($event)">
+                    <option value="en">English</option>
+                    <option value="fr">French</option>
+                </select>
+            </ng-container>
             
             <button mat-raised-button (click)="logout()" *ngIf="storeData?.id">
                 Logout

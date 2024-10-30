@@ -24,6 +24,7 @@ export class AppComponent {
   ) {
     this.translate.addLangs(['en', 'fr']);
     this.translate.setDefaultLang('en');
+    localStorage.setItem('i18nLang', 'en');
   }
 
   ngOnInit() {}

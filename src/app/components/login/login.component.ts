@@ -7,10 +7,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { FetchDataService } from '../../services/fetch-data.service';
-import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { HeadersComponent } from '../headers/headers.component';
 
 @Component({
@@ -23,10 +23,10 @@ import { HeadersComponent } from '../headers/headers.component';
     MatCardModule,
     MatIconModule,
     ReactiveFormsModule,
+    TranslateModule,
     NgIf,
     NgxSpinnerModule,
     NgClass,
-    TranslateModule,
     HeadersComponent
   ],
   templateUrl: './login.component.html',
@@ -45,7 +45,6 @@ export class LoginComponent {
     private fetchService: FetchDataService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
-    public translateS: TranslateService,
     private translate: TranslatePipe,
   ) {}
 

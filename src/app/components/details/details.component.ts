@@ -2,12 +2,13 @@ import { NgIf } from '@angular/common';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Octokit } from "octokit";
+import { from, Observable } from 'rxjs';
 import { AudioRecordingService } from '../../services/audio-recording.service';
 import { FetchDataService } from '../../services/fetch-data.service';
-import { from, Observable } from 'rxjs';
 
 const octokit = new Octokit({
 
@@ -17,8 +18,8 @@ const octokit = new Octokit({
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [NgIf, ReactiveFormsModule, NgxSpinnerModule,],
-  providers: [AudioRecordingService],
+  imports: [NgIf, ReactiveFormsModule, NgxSpinnerModule, TranslateModule],
+  providers: [AudioRecordingService, TranslatePipe],
   templateUrl: './details.component.html',
   styleUrl: './details.component.scss'
 })
@@ -51,6 +52,7 @@ export class DetailsComponent implements OnInit {
      private spinner: NgxSpinnerService,
      private fetchService: FetchDataService,
      private toastr: ToastrService,
+     public translate: TranslatePipe
   ) { }
 
   ngOnInit(): void {
