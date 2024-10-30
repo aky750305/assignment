@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Octokit } from "octokit";
 import { AudioRecordingService } from '../../services/audio-recording.service';
 import { FetchDataService } from '../../services/fetch-data.service';
+import { from, Observable } from 'rxjs';
 
 const octokit = new Octokit({
 
@@ -119,37 +120,41 @@ export class DetailsComponent implements OnInit {
     document.body.removeChild(anchor);
   }
 
-
-
-  // _downloadFile(): any {
-  //       var t = octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
-  //     owner: 'aky750305',
-  //     repo: 'assignment',
-  //     path: 'src/assets/123',
-  //     headers: {
-  //       'X-GitHub-Api-Version': '2022-11-28'
-  //     }
-  //   }).then((e: any) => {
-  //     console.log(e);
-  //     // const daaat = `data:audio/wav;base64,${e.data.content}`;
-  //     const blob = new Blob([daaat], { type: 'audio/ogg' });
-  //   const url = window.URL.createObjectURL(blob);
-  //   const anchor = document.createElement('a');
-  //   anchor.download = 'efds';
-  //   anchor.href = url;
-  //   document.body.appendChild(anchor);
-  //   anchor.click();
-  //   document.body.removeChild(anchor);
-  //   });
-
-  // }
-
   close() {
     this.closeModal.emit();
   }
 
   getAudioFile() {
-    
+    octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+      owner: 'aky750305',
+      repo: 'assignment',
+      ref: 'audio_files',
+      path: this.inputData.audio_file_path,
+            headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    })
+    .then(async (e: any) => {
+      const t = await this.toBlob(`data:audio/wav;base64,${e.data.content}`).subscribe({
+        next: (blob: any) => {
+          this.audioBlob = blob;
+          // this.audioName = data.title;
+          this.audioBlobUrl = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
+          console.log(this.audioBlobUrl);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    });
+  }
+
+  toBlob(file: string): Observable<Blob> {
+    return from(
+      fetch(file)
+        .then((res) => res.blob())
+        .then((blob) => blob)
+    );
   }
 
   submitData() {
@@ -171,7 +176,7 @@ export class DetailsComponent implements OnInit {
             content: base64data.split(",")[1]
           })
           .then((e: any) => {
-            that.savePayload(e.data.content.path)
+            that.savePayload(e.data.content.path);
           });
         }
       } else {
