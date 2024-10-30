@@ -1,3 +1,14 @@
 {
-    "welcome": "Hi"
+    "welcome": "Welcome",
+    "name": "Name",
+    "action": "Action",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "email_address": "Email Address",
+    "phone": "Phone Number",
+    "voice_message": "Voice Message",
+    "close": "Close",
+    "save": "Ssaveave",
+    "submit": "Submit",
+    "add_user": "Add User"
 }
