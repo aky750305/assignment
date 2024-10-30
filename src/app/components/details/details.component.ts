@@ -10,7 +10,7 @@ import { FetchDataService } from '../../services/fetch-data.service';
 import { from, Observable } from 'rxjs';
 
 const octokit = new Octokit({
-
+  
 });
 
 @Component({
@@ -22,6 +22,7 @@ const octokit = new Octokit({
   styleUrl: './details.component.scss'
 })
 export class DetailsComponent implements OnInit {
+  uploadNow = false;
   isPlaying = false;
   displayControls = true;
   isAudioRecording = false;
@@ -82,6 +83,7 @@ export class DetailsComponent implements OnInit {
 
     startAudioRecording() {
     if (!this.isAudioRecording) {
+      this.uploadNow = true;
       this.isAudioRecording = true;
       this.audioRecordingService.startRecording();
     }
@@ -125,6 +127,7 @@ export class DetailsComponent implements OnInit {
   }
 
   getAudioFile() {
+    this.spinner.show();
     octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
       owner: 'aky750305',
       repo: 'assignment',
@@ -138,9 +141,8 @@ export class DetailsComponent implements OnInit {
       const t = await this.toBlob(`data:audio/wav;base64,${e.data.content}`).subscribe({
         next: (blob: any) => {
           this.audioBlob = blob;
-          // this.audioName = data.title;
           this.audioBlobUrl = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
-          console.log(this.audioBlobUrl);
+          this.spinner.hide();
         },
         error: (err) => {
           console.log(err);
@@ -159,7 +161,8 @@ export class DetailsComponent implements OnInit {
 
   submitData() {
     if (this.form.valid) {
-      if (this.audioBlobUrl) {
+      this.spinner.show();
+      if (this.audioBlobUrl && this.uploadNow) {
         var reader = new FileReader();
         reader.readAsDataURL(this.audioBlob);
         const that = this;
@@ -176,6 +179,7 @@ export class DetailsComponent implements OnInit {
             content: base64data.split(",")[1]
           })
           .then((e: any) => {
+            that.uploadNow = false;
             that.savePayload(e.data.content.path);
           });
         }
@@ -189,7 +193,7 @@ export class DetailsComponent implements OnInit {
     let payload : any= {
       ...this.form.value
     }
-    path ? payload['audio_file_path'] = path : '';
+    path ? payload['audio_file_path'] = path : this.inputData?.audio_file_path || false;
     this.inputData?.id ? payload['id'] = this.inputData.id : '';
     let apiCall: any;
 

@@ -33,7 +33,8 @@ export class DashboardComponent implements OnInit {
 
   getListData() {
     this.spinner.show();
-    this.fetchService.listingData({type: this.storeData.type}).subscribe({
+    this.dataSource = [];
+    this.fetchService.listingData({type: this.storeData.type, id: this.storeData.id}).subscribe({
       next: (res) => {
         this.dataSource = res;
         this.spinner.hide();
@@ -63,6 +64,18 @@ export class DashboardComponent implements OnInit {
     this.inputData = null;
     this.modalRef.hide();
     this.getListData();
+  }
+
+  deleteData(element: any) {
+    this.spinner.show();
+    this.fetchService.listingData({type: this.storeData.type, deleteId: element.id}).subscribe({
+      next: (res) => {
+        this.getListData();
+      },
+      error: (err) => {
+        this.spinner.hide();
+      }
+    })
   }
 
 }
