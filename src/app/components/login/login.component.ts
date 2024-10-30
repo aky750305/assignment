@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { FetchDataService } from '../../services/fetch-data.service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -23,11 +24,12 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
     ReactiveFormsModule,
     NgIf,
     NgxSpinnerModule,
-    NgClass
+    NgClass,
+    TranslateModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
-  providers: [FetchDataService]
+  providers: [FetchDataService, TranslatePipe]
 })
 export class LoginComponent {
 
@@ -40,7 +42,9 @@ export class LoginComponent {
     private router: Router,
     private fetchService: FetchDataService,
     private toastr: ToastrService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    public translateS: TranslateService,
+    private translate: TranslatePipe,
   ) {}
 
   login() {

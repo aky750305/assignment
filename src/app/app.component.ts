@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,8 @@ import { RouterModule } from '@angular/router';
   imports: [
     RouterModule,
     HttpClientModule,
-    MatDialogModule
+    MatDialogModule,
+    TranslateModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -17,7 +19,12 @@ import { RouterModule } from '@angular/router';
 export class AppComponent {
   title = 'Health Facility';
 
-  constructor() {}
+  constructor(
+    public translate: TranslateService
+  ) {
+    this.translate.addLangs(['en', 'fr']);
+    this.translate.setDefaultLang('en');
+  }
 
   ngOnInit() {}
 }
