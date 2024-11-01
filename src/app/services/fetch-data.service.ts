@@ -6,7 +6,7 @@ import { Octokit } from "octokit";
 export class FetchDataService {
     apiUrl = 'https://671e6dac1dfc4299198246a8.mockapi.io/api/v1';
     octokit = new Octokit({
-        auth:  "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"
+
     });
     constructor(private http: HttpClient) {}
 
