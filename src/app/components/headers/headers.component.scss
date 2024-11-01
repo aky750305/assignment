@@ -1,8 +1,12 @@
 .nav-bar {
-    padding: 1rem 3rem 0;
+    padding: 1rem 3rem 0 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    img {
+        height: 4rem;
+    }
 
     button {
         border: none;
@@ -15,7 +19,7 @@
         // position: absolute;
         // left: 85%;
         border: none;
-        text-decoration: underline;
+        text-decoration: underline; 
 
         option {
             font-size: small;
