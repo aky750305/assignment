@@ -194,7 +194,7 @@ export class DetailsComponent implements OnInit {
 
     this.dbService.add('data', payload)?.subscribe({
       next: (res) => {
-        this.toastr.warning('Due to Internet Connection, Data may vary', 'No Connection', {
+        this.toastr.warning("Don't Worry! Your data has been saved locally", 'No Internet Connection', {
           timeOut: 2000
         });
         this.closeModal.emit();
