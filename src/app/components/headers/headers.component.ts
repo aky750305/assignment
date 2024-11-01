@@ -2,20 +2,22 @@ import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslatePipe, TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-headers',
   standalone: true,
-  imports: [NgIf, FormsModule],
+  imports: [NgIf, FormsModule, TranslateModule],
   templateUrl: './headers.component.html',
-  styleUrl: './headers.component.scss'
+  styleUrl: './headers.component.scss',
+  providers: [TranslatePipe]
 })
 export class HeadersComponent implements OnInit {
   storeData: any;
   i18nLang: any;
   constructor(
     private router: Router,
-    public translate: TranslateService
+    public translate: TranslatePipe,
+    public translateS: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -26,7 +28,7 @@ export class HeadersComponent implements OnInit {
 
   onChange(event: Event) {
     const selectedVal = (event.target as HTMLInputElement).value
-    this.translate.use(selectedVal);
+    this.translateS.use(selectedVal);
     localStorage.setItem('i18nLang', selectedVal);
   }
 

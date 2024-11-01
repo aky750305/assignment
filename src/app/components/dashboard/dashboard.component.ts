@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   imports: [MatTableModule, ModalModule, NgxSpinnerModule, DetailsComponent, TranslateModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
-  providers: [FetchDataService, BsModalService, TranslatePipe]
+  providers: [BsModalService, TranslatePipe]
 })
 export class DashboardComponent implements OnInit {
   @Input() storeData: any;
@@ -34,6 +34,9 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getListData();
+    this.fetchService.currentData$.subscribe(res => {
+      this.getListData();
+    })
   }
 
   getListData() {

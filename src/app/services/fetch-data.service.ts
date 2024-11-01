@@ -1,13 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Octokit } from "octokit";
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable()
 export class FetchDataService {
     apiUrl = 'https://671e6dac1dfc4299198246a8.mockapi.io/api/v1';
     octokit = new Octokit({
-
+        auth: "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"
     });
+    private dataSubject = new BehaviorSubject<boolean>(false); // Initial value: false
+    currentData$ = this.dataSubject.asObservable();
+
     constructor(private http: HttpClient) {}
 
     loginUser(data: any) {
@@ -64,8 +68,8 @@ export class FetchDataService {
           })
     }
 
-    getupdateObs() {
-
+    updateTable(data: boolean) {
+        this.dataSubject.next(data);
     }
     
 }

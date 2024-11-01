@@ -4,11 +4,15 @@
     "action": "Action",
     "first_name": "Prénom",
     "last_name": "Nom de famille",
-    "email_address": "Adresse email",
+    "email": "Adresse email",
     "phone": "Numéro de téléphone",
     "voice_message": "Message vocal",
     "close": "Fermer",
     "save": "Sauvegarder",
     "submit": "Soumettre",
-    "add_user": "Ajouter un utilisateur"
+    "add_user": "Ajouter un utilisateur",
+    "sign_in": "Se connecter",
+    "password": "Mot de passe",
+    "logout": "Déconnexion"
+
 }

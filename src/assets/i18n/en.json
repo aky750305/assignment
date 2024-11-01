@@ -4,11 +4,14 @@
     "action": "Action",
     "first_name": "First Name",
     "last_name": "Last Name",
-    "email_address": "Email Address",
+    "email": "Email Address",
     "phone": "Phone Number",
     "voice_message": "Voice Message",
     "close": "Close",
     "save": "Save",
     "submit": "Submit",
-    "add_user": "Add User"
+    "add_user": "Add User",
+    "sign_in": "Sign In",
+    "password": "Password",
+    "logout": "Logout"
 }

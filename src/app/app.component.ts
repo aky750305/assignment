@@ -81,7 +81,7 @@ export class AppComponent {
     apiCall.subscribe({
       next: (res: any) => {
         this.dbService.clear('data').subscribe((successDeleted) => {
-          this
+          this.fetchService.updateTable(true);
           this.toastr.success('Data added / updated successfully', '', {
             timeOut: 1000
           });
