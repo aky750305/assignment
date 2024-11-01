@@ -59,7 +59,7 @@ export class DetailsComponent implements OnInit {
     const retrievedObject: any = localStorage.getItem('userData')
     this.storeData = JSON.parse(retrievedObject);
 
-    if (this.inputData?.audio_file_path) {
+    if (this.inputData?.audio_file_path && this.inputData?.audio_file_path.split('_')[0] === 'patients') {
       this.getAudioFile();
     }
 
@@ -131,7 +131,7 @@ export class DetailsComponent implements OnInit {
 
   getAudioFile() {
     this.spinner.show();
-    const reqData: any = this.fetchService.uploadAudioFiles(this.inputData.audio_file_path);
+    const reqData: any = this.fetchService.getUploadFiles(this.inputData.audio_file_path);
     reqData.then(async (e: any) => {
       const t = await this.toBlob(`data:audio/wav;base64,${e.data.content}`).subscribe({
         next: (blob: any) => {
@@ -167,7 +167,7 @@ export class DetailsComponent implements OnInit {
           that.internetService.getInternetStatus() ? that.onlineAudio(base64String) : that.offlineAudio(base64String)
         }
       } else {
-        this.savePayload()
+        this.internetService.getInternetStatus() ? this.savePayload() : this.offlineAudio();
       }
     }
   }
@@ -177,7 +177,7 @@ export class DetailsComponent implements OnInit {
       ...this.form.value
     }
 
-    this.inputData?.id ? payload['id'] = this.inputData.id : '';
+    payload['id'] = this.inputData?.id ? this.inputData.id : `user_${Date.now()}`;
 
     if (this.storeData.type === 'admin') {
       payload['type'] = 'caregiver';
@@ -191,27 +191,19 @@ export class DetailsComponent implements OnInit {
     } else if (this.inputData?.audio_file_path) {
       payload['audio_file_path'] = this.inputData?.audio_file_path;
     }
-    
-    this.dbService.add('data', payload).subscribe((result) => {
-      this.toastr.warning('Due to Internet Connection, Data may vary', 'No Connection', {
-        timeOut: 2000
-      });
-      this.spinner.hide();
-      this.getIndexDBData();
-    });
-  }
 
-  getIndexDBData() {
-    setTimeout(() => {
-      this.dbService.getAll('data').subscribe(res => {
-        const element: any = res[0];
-        if(element?.base64String) {
-          this.onlineAudio(element?.base64String, element);
-        } else {
-          this.saveIndexDBData(element)
-        }
-      })
-    }, 1000)
+    this.dbService.add('data', payload)?.subscribe({
+      next: (res) => {
+        this.toastr.warning('Due to Internet Connection, Data may vary', 'No Connection', {
+          timeOut: 2000
+        });
+        this.closeModal.emit();
+        this.spinner.hide();
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   onlineAudio(base64String: any, element?: any) {
