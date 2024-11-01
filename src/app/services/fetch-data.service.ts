@@ -7,7 +7,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 export class FetchDataService {
     apiUrl = 'https://671e6dac1dfc4299198246a8.mockapi.io/api/v1';
     octokit = new Octokit({
-        auth: "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"
+        auth: ""
     });
     private dataSubject = new BehaviorSubject<boolean>(false); // Initial value: false
     currentData$ = this.dataSubject.asObservable();
