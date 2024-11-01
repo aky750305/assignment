@@ -21,9 +21,9 @@ export class FetchDataService {
     }
 
     deleteData(data: any) {
-        return data.type === 'admin' ? 
-            this.http.delete<any[]>(`${this.apiUrl}/users`, {params: {id: data.deleteId}})
-            : this.http.delete<any[]>(`${this.apiUrl}/patients`, {params: {id: data.deleteId}})
+        return data.type === 'patient' ? 
+            this.http.delete<any[]>(`${this.apiUrl}/patients/${data.deleteId}`)
+            : this.http.delete<any[]>(`${this.apiUrl}/users/${data.deleteId}`)
     } 
 
     addCareGiver(payload: any) {
@@ -62,6 +62,10 @@ export class FetchDataService {
               'X-GitHub-Api-Version': '2022-11-28'
             }
           })
+    }
+
+    getupdateObs() {
+
     }
     
 }

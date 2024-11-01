@@ -6,6 +6,7 @@ import { FetchDataService } from '../../services/fetch-data.service';
 import { DetailsComponent } from '../details/details.component';
 import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
 import { InternetService } from '../../services/internet.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,7 +28,8 @@ export class DashboardComponent implements OnInit {
     public modalService: BsModalService,
     public modalRef: BsModalRef,
     public translate: TranslatePipe,
-    private internetService: InternetService
+    private internetService: InternetService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -74,8 +76,11 @@ export class DashboardComponent implements OnInit {
   deleteData(element: any) {
     if (!this.internetService.checkInternetStatus()) return;
     this.spinner.show();
-    this.fetchService.listingData({type: this.storeData.type, deleteId: element.id}).subscribe({
+    this.fetchService.deleteData({type: element.type, deleteId: element.id}).subscribe({
       next: (res) => {
+        this.toastr.success('Data deleted successfully', '', {
+          timeOut: 2000
+        });
         this.getListData();
       },
       error: (err) => {

@@ -38,6 +38,9 @@ export class AppComponent {
 
     this.internetStatus.createOnline$().subscribe((isOnline) => {
       this.internetStatus.setInternetStatus(isOnline);
+      if (isOnline) {
+        this.getIndexDBData();
+      }
 
     })
   }
@@ -47,11 +50,13 @@ export class AppComponent {
   getIndexDBData() {
     this.dbService.getAll('data').subscribe(res => {
       if (res[0]) {
+        this.spinner.show();
         const element: any = res[0];
         if(element?.base64String) {
           const reqData: any = this.fetchService.uploadAudioFiles(element.base64String);
           reqData.then((e: any) => {
-            this.saveIndexDBData(element);
+            delete element.base64String;
+            this.saveIndexDBData(element, e.data.content.name);
           });
         } else {
           this.saveIndexDBData(element)
@@ -60,22 +65,28 @@ export class AppComponent {
     })
   }
 
-  saveIndexDBData(element: any) {
+  saveIndexDBData(element: any, fileName?: string) {
+    if(element.id?.split("_")[1]) delete element.id;
+    fileName ? element['audio_file_path'] = fileName : false;
     let apiCall: any;
     if (element.type === 'caregiver') {
       apiCall = element?.id
         ? this.fetchService.editCareGiver(element)
         : this.fetchService.addCareGiver(element)
-    } else if (element.type === 'caregiver') {
+    } else if (element.type === 'patient') {
       apiCall = element?.id
         ? this.fetchService.editPatients(element)
         : this.fetchService.addPatients(element)
     }
     apiCall.subscribe({
       next: (res: any) => {
-        this.toastr.success('Data added / updated successfully', '', {
-          timeOut: 3000,
+        this.dbService.clear('data').subscribe((successDeleted) => {
+          this
+          this.toastr.success('Data added / updated successfully', '', {
+            timeOut: 1000
+          });
         });
+        this.spinner.hide();
       },
       error: (err: any) => {
         this.toastr.error('Please try again later', '', {
