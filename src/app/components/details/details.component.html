@@ -24,16 +24,16 @@
         </div>
       </div>
       <div class="col-lg-12">
-        <label for="number">{{'email_address' | translate}}</label><br />
-        <input type="text" id="email" placeholder="Email Address" formControlName="email">
+        <label for="emails">Email Address</label><br />
+        <input type="email" id="email" placeholder="Email Address" formControlName="email">
         <div class="error-msg" *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty ||
         form.controls['email'].touched)">
-          <i class="material-icons">&#xe002;</i> Enter email address.
+          <i class="material-icons">&#xe002;</i> Enter valid email address.
         </div>
       </div>
       <div class="col-lg-6 col-md-6">
-        <label for="number">{{'phone' | translate}}</label><br />
-        <input type="number" id="phone" placeholder="Phone number" formControlName="phone">
+        <label for="phone">Phone number</label><br />
+        <input type="tel" id="phone" name="phone" placeholder="Phone number" formControlName="phone">
         <div class="error-msg" *ngIf="form.controls['phone'].invalid && (form.controls['phone'].dirty ||
         form.controls['phone'].touched)">
           <i class="material-icons">&#xe002;</i>Enter 10 digit phone number.

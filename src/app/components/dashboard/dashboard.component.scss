@@ -2,9 +2,11 @@ button {
     border-radius: 1.5rem;
     padding: .75rem;
     border-style: none;
-    background-color: darkcyan;
+    background-color: #006080;
     font-size: 14px;
     color: white;
+    width: 10%;
+    font-weight: 500;
     margin-bottom: 2rem;
 }
 
@@ -27,17 +29,26 @@ table {
     .material-icons {
       color: mediumblue;
       margin-right: 12px ;
-    }
+      cursor: pointer;
+        }
+
+        .material-icons:hover {
+          color: #000066;
+        }
   }
   
   tr:nth-child(even) {
-    background-color: #D6EEEE;
+    background-color: #e6f9ff;
     color: black;
   }
 
   tr:nth-child(odd) {
     background-color: white;
     color: black;
+
+    .thead {
+      background-color: #ccf3ff;
+    }
   }
   
   
