@@ -13,9 +13,9 @@
             
                 <ng-container matColumnDef="action">
                     <th mat-header-cell *matHeaderCellDef>{{ 'action' | translate }}</th>
-                    <td mat-cell *matCellDef="let element" (click)="OpenModal(template, element)">
-                         <i class="material-icons">edit</i>
-                         <i class="material-icons">&#xe872;</i>
+                    <td mat-cell *matCellDef="let element">
+                         <i class="material-icons" (click)="OpenModal(template, element)">edit</i>
+                         <i class="material-icons" (click)="deleteData(element)">&#xe872;</i>
                      </td>
                 </ng-container>
             

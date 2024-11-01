@@ -3,17 +3,15 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } fro
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { Octokit } from "octokit";
 import { from, Observable } from 'rxjs';
 import { AudioRecordingService } from '../../services/audio-recording.service';
 import { FetchDataService } from '../../services/fetch-data.service';
+import { InternetService } from '../../services/internet.service';
 
-const octokit = new Octokit({
 
-
-});
 
 @Component({
   selector: 'app-details',
@@ -46,13 +44,15 @@ export class DetailsComponent implements OnInit {
   storeData: any;
 
   constructor(
-     private audioRecordingService: AudioRecordingService,
-     private ref: ChangeDetectorRef,
-     private sanitizer: DomSanitizer,
-     private spinner: NgxSpinnerService,
-     private fetchService: FetchDataService,
-     private toastr: ToastrService,
-     public translate: TranslatePipe
+    private audioRecordingService: AudioRecordingService,
+    private ref: ChangeDetectorRef,
+    private sanitizer: DomSanitizer,
+    private spinner: NgxSpinnerService,
+    private fetchService: FetchDataService,
+    private toastr: ToastrService,
+    public translate: TranslatePipe,
+    public internetService: InternetService,
+    private dbService: NgxIndexedDBService,
   ) { }
 
   ngOnInit(): void {
@@ -74,17 +74,17 @@ export class DetailsComponent implements OnInit {
     });
 
     this.audioRecordingService.getRecordedBlob().subscribe((data) => {
-    
+
       this.audioBlob = data.blob;
       this.audioName = data.title;
       this.audioBlobUrl = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(data.blob));
       this.ref.detectChanges();
     });
 
-   if (this.inputData) this.form.patchValue(this.inputData);
+    if (this.inputData) this.form.patchValue(this.inputData);
   }
 
-    startAudioRecording() {
+  startAudioRecording() {
     if (!this.isAudioRecording) {
       this.uploadNow = true;
       this.isAudioRecording = true;
@@ -131,16 +131,8 @@ export class DetailsComponent implements OnInit {
 
   getAudioFile() {
     this.spinner.show();
-    octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
-      owner: 'aky750305',
-      repo: 'assignment',
-      ref: 'audio_files',
-      path: this.inputData.audio_file_path,
-            headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
-    })
-    .then(async (e: any) => {
+    const reqData: any = this.fetchService.uploadAudioFiles(this.inputData.audio_file_path);
+    reqData.then(async (e: any) => {
       const t = await this.toBlob(`data:audio/wav;base64,${e.data.content}`).subscribe({
         next: (blob: any) => {
           this.audioBlob = blob;
@@ -171,20 +163,8 @@ export class DetailsComponent implements OnInit {
         const that = this;
         reader.onloadend = async function () {
           var base64data: any = reader.result;
-          console.log(base64data.split(",")[0]);
-          await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
-            owner: 'aky750305',
-            repo: 'assignment',
-            branch: 'audio_files',
-            path: `patients_${Date.now()}`,
-            message: 'upload file',
-            sha: "4f8a0fd8ab3537b85a64dcffa1487f4196164d78",
-            content: base64data.split(",")[1]
-          })
-          .then((e: any) => {
-            that.uploadNow = false;
-            that.savePayload(e.data.content.path);
-          });
+          const base64String = base64data.split(",")[1];
+          that.internetService.getInternetStatus() ? that.onlineAudio(base64String) : that.offlineAudio(base64String)
         }
       } else {
         this.savePayload()
@@ -192,8 +172,58 @@ export class DetailsComponent implements OnInit {
     }
   }
 
+  offlineAudio(base64String?: string) {
+    let payload: any = {
+      ...this.form.value
+    }
+
+    this.inputData?.id ? payload['id'] = this.inputData.id : '';
+
+    if (this.storeData.type === 'admin') {
+      payload['type'] = 'caregiver';
+    } else if (this.storeData.type === 'caregiver') {
+      payload['caregiver_id'] = this.storeData.id;
+      payload['type'] = 'patient';
+    }
+
+    if (base64String) {
+      payload['base64String'] = base64String;
+    } else if (this.inputData?.audio_file_path) {
+      payload['audio_file_path'] = this.inputData?.audio_file_path;
+    }
+    
+    this.dbService.add('data', payload).subscribe((result) => {
+      this.toastr.warning('Due to Internet Connection, Data may vary', 'No Connection', {
+        timeOut: 2000
+      });
+      this.spinner.hide();
+      this.getIndexDBData();
+    });
+  }
+
+  getIndexDBData() {
+    setTimeout(() => {
+      this.dbService.getAll('data').subscribe(res => {
+        const element: any = res[0];
+        if(element?.base64String) {
+          this.onlineAudio(element?.base64String, element);
+        } else {
+          this.saveIndexDBData(element)
+        }
+      })
+    }, 1000)
+  }
+
+  onlineAudio(base64String: any, element?: any) {
+    const reqData: any = this.fetchService.uploadAudioFiles(base64String);
+    reqData.then((e: any) => {
+      this.uploadNow = false;
+      element ? this.saveIndexDBData(element) : this.savePayload(e.data.content.path);
+    });
+  }
+
   savePayload(path?: string) {
-    let payload : any= {
+    let payload: any = {
       ...this.form.value
     }
     path ? payload['audio_file_path'] = path : this.inputData?.audio_file_path || false;
@@ -201,26 +231,53 @@ export class DetailsComponent implements OnInit {
     let apiCall: any;
 
     if (this.storeData.type === 'admin') {
-      payload['type']='caregiver';
+      payload['type'] = 'caregiver';
       apiCall = this.inputData?.id
-       ? this.fetchService.editCareGiver(payload)
-       : this.fetchService.addCareGiver(payload)
+        ? this.fetchService.editCareGiver(payload)
+        : this.fetchService.addCareGiver(payload)
     } else if (this.storeData.type === 'caregiver') {
       payload['caregiver_id'] = this.storeData.id;
-      payload['type']='patient';
+      payload['type'] = 'patient';
       apiCall = this.inputData?.id
-       ? this.fetchService.editPatients(payload)
-       : this.fetchService.addPatients(payload)
+        ? this.fetchService.editPatients(payload)
+        : this.fetchService.addPatients(payload)
     }
     apiCall.subscribe({
       next: (res: any) => {
-        this.toastr.success ('Data added / updated successfully','', {
+        this.toastr.success('Data added / updated successfully', '', {
           timeOut: 3000,
         });
         this.updateTable.emit();
       },
       error: (err: any) => {
-        this.toastr.error ('Please try again later','', {
+        this.toastr.error('Please try again later', '', {
+          timeOut: 3000,
+        });
+        this.spinner.hide();
+      }
+    })
+  }
+
+  saveIndexDBData(element: any) {
+    let apiCall: any;
+    if (element.type === 'caregiver') {
+      apiCall = element?.id
+        ? this.fetchService.editCareGiver(element)
+        : this.fetchService.addCareGiver(element)
+    } else if (element.type === 'caregiver') {
+      apiCall = element?.id
+        ? this.fetchService.editPatients(element)
+        : this.fetchService.addPatients(element)
+    }
+    apiCall.subscribe({
+      next: (res: any) => {
+        this.toastr.success('Data added / updated successfully', '', {
+          timeOut: 3000,
+        });
+        this.updateTable.emit();
+      },
+      error: (err: any) => {
+        this.toastr.error('Please try again later', '', {
           timeOut: 3000,
         });
         this.spinner.hide();

@@ -5,6 +5,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { FetchDataService } from '../../services/fetch-data.service';
 import { DetailsComponent } from '../details/details.component';
 import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
+import { InternetService } from '../../services/internet.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +16,6 @@ import { TranslateModule, TranslatePipe } from '@ngx-translate/core';
   providers: [FetchDataService, BsModalService, TranslatePipe]
 })
 export class DashboardComponent implements OnInit {
-  // modalRef: BsModalRef;
   @Input() storeData: any;
   dataSource: any;
   displayedColumns: string[]= [ 'name', 'action'];
@@ -26,7 +26,8 @@ export class DashboardComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public modalService: BsModalService,
     public modalRef: BsModalRef,
-    public translate: TranslatePipe
+    public translate: TranslatePipe,
+    private internetService: InternetService
   ) {}
 
   ngOnInit(): void {
@@ -49,10 +50,12 @@ export class DashboardComponent implements OnInit {
   }
 
   addData(template: TemplateRef<any>) {
+    if (!this.internetService.checkInternetStatus()) return;
     this.modalRef = this.modalService.show(template); 
   }
 
   OpenModal(template: TemplateRef<any>, data?: any) {
+    if (!this.internetService.checkInternetStatus()) return;
     this.inputData = data;
     this.modalRef = this.modalService.show(template); 
   }
@@ -69,6 +72,7 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteData(element: any) {
+    if (!this.internetService.checkInternetStatus()) return;
     this.spinner.show();
     this.fetchService.listingData({type: this.storeData.type, deleteId: element.id}).subscribe({
       next: (res) => {

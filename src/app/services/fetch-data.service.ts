@@ -1,9 +1,13 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { Octokit } from "octokit";
 
 @Injectable()
 export class FetchDataService {
     apiUrl = 'https://671e6dac1dfc4299198246a8.mockapi.io/api/v1';
+    octokit = new Octokit({
+
+    });
     constructor(private http: HttpClient) {}
 
     loginUser(data: any) {
@@ -35,4 +39,29 @@ export class FetchDataService {
     editPatients(payload: any) {
         return this.http.put<any[]>(`${this.apiUrl}/patients/${payload.id}`, payload)
     }
+
+    uploadAudioFiles(base64data: string) {
+        return this.octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
+            owner: 'aky750305',
+            repo: 'assignment',
+            branch: 'audio_files',
+            path: `patients_${Date.now()}`,
+            message: 'upload file',
+            sha: "4f8a0fd8ab3537b85a64dcffa1487f4196164d78",
+            content: base64data
+          })
+    }
+
+    getUploadFiles(audio_file_path: string) {
+        return this.octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+            owner: 'aky750305',
+            repo: 'assignment',
+            ref: 'audio_files',
+            path: audio_file_path,
+                  headers: {
+              'X-GitHub-Api-Version': '2022-11-28'
+            }
+          })
+    }
+    
 }
